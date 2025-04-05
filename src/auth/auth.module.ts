@@ -9,6 +9,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsuarioEntity } from 'src/usuario/entity/usuario.entity';
 import { RolEntity } from 'src/rol/entity/rol.entity';
+import { ActividadModule } from 'src/actividad/actividad.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { RolEntity } from 'src/rol/entity/rol.entity';
         signOptions: { expiresIn: '30m' }
       })
     }),
-    TypeOrmModule.forFeature([UsuarioEntity, RolEntity])
+    TypeOrmModule.forFeature([UsuarioEntity, RolEntity]),
+    ActividadModule
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],

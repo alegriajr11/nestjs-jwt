@@ -9,6 +9,7 @@ import { ProductoModule } from './producto/producto.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { RolModule } from './rol/rol.module';
 import { AuthModule } from './auth/auth.module';
+import { ActividadModule } from './actividad/actividad.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { AuthModule } from './auth/auth.module';
     UsuarioModule,
     RolModule,
     AuthModule,
+    ActividadModule,
     //ProductoModule
   ],
   controllers: [AppController],

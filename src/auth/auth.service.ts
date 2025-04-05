@@ -7,6 +7,8 @@ import { UsuarioEntity } from 'src/usuario/entity/usuario.entity';
 import * as bcrypt from 'bcryptjs';
 import { Repository } from 'typeorm';
 import { MessageDto } from 'src/common/message.dto';
+import { ActividadService } from 'src/actividad/actividad.service';
+import { CreateActividadDto } from 'src/actividad/dto/create-actividad.dto';
 
 
 @Injectable()
@@ -16,7 +18,8 @@ export class AuthService {
         @InjectRepository(UsuarioEntity)
         private usuarioRepository: Repository<UsuarioEntity>,
         @InjectRepository(RolEntity)
-        private rolRepository: Repository<RolEntity>
+        private rolRepository: Repository<RolEntity>,
+        private actividadService: ActividadService,
     ){}
 
     async register(userData: CreateUsuarioDto){
@@ -40,6 +43,12 @@ export class AuthService {
 
         await this.usuarioRepository.save(newUser)
 
+        const actividadDto = new CreateActividadDto();
+        actividadDto.act_nombre = 'Registro de usuario';
+        actividadDto.act_descripcion = `Usuario ${userData.usu_nombreUsuario} registrado`;
+        actividadDto.usuarioId = newUser.usu_id;
+
+        await this.actividadService.registrarActividad(actividadDto);
         return new MessageDto('Usuario Registrado exitosamente');
     }
 
@@ -70,6 +79,15 @@ export class AuthService {
         if(!user){
             throw new UnauthorizedException('Credenciales incorrectas');
         }
+
+        const actividadDto = new CreateActividadDto();
+        actividadDto.act_nombre = 'Inicio de sesión';
+        actividadDto.act_descripcion = `Usuario ${username} ha iniciado sesión`;
+        actividadDto.usuarioId = user.usu_id;
+
+        await this.actividadService.registrarActividad(actividadDto);
+
+        //Genera un token de acceso y lo retorna
         return this.generateToken(user)
     }
 }

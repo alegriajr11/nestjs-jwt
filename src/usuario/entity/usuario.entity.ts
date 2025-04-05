@@ -1,5 +1,6 @@
+import { ActividadEntity } from 'src/actividad/entity/actividad.entity';
 import { RolEntity } from 'src/rol/entity/rol.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 
 @Entity({name: 'usuario'})
@@ -18,4 +19,7 @@ export class UsuarioEntity {
 
   @ManyToOne(() => RolEntity, (rol) => rol.usuarios)
   rol: RolEntity;
+
+  @OneToMany(() => ActividadEntity, (actividad) => actividad.usuario)
+  actividades: ActividadEntity;
 }
